@@ -21,6 +21,7 @@
 #include <cmath>
 #include <cstdint>
 #include <cstdlib>
+#include <cstring>
 
 typedef enum
 {
@@ -55,8 +56,8 @@ const LV2_Descriptor* lv2_descriptor (uint32_t index)
         [] (const LV2_Descriptor* descriptor,
             double rate,
             const char* bundle_path,
-            const LV2_Feature* const* features) {
-            contexpr auto blockLength = "http://lv2plug.in/ns/ext/buf-size#boundedBlockLength";
+            const LV2_Feature* const* features) -> LV2_Handle {
+            constexpr auto blockLength = "http://lv2plug.in/ns/ext/buf-size#boundedBlockLength";
 
             if (findMatchingFeature (features, blockLength) == nullptr)
                 return nullptr;
@@ -97,7 +98,7 @@ const LV2_Descriptor* lv2_descriptor (uint32_t index)
         },
         [] (LV2_Handle) {},
         [] (LV2_Handle instance) { free (instance); },
-        [] (const char*) { return nullptr; },
+        [] (const char*) -> const void* { return nullptr; },
     };
 
     return index == 0 ? &descriptor : nullptr;
